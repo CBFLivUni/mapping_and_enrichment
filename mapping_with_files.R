@@ -1,5 +1,14 @@
+# Function to Download a file.
+bdown=function(url, file){
+  library('RCurl')
+  f = CFILE(file, mode="wb")
+  a = curlPerform(url = url, writedata = f@ref, noprogress=FALSE)
+  close(f)
+  return(a)
+}
 
 
+# Function to download the latest mapping data files from the UniProt website.
 download_files <- function() {
   if (!file.exists('idmapping.dat.gz')) {
     ret = bdown('ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping.dat.gz', 'idmapping.dat.gz')
@@ -11,7 +20,7 @@ download_files <- function() {
   
 }
 
-# This functiuon
+# DEPRECATED: This function accepts a list of accessions and filters idmapping.data.gz (in the working directory).
 filterIdData <- function(species_all_accessions) {
   download_files()
   
