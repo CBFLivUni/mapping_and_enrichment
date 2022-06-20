@@ -1,3 +1,5 @@
+# Types of ID that are available in the 'selected' mapping file.
+# It's a smaller set of ID types than in the non-'selected' mapping file.
 uniprot_selected_term_types = c('UniProtKB-AC',
                                 'UniProtKB-ID',
                                 'GeneID (EntrezGene)',
