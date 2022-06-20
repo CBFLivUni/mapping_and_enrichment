@@ -31,12 +31,12 @@ func main() {
 	}
 
 	if _, err := os.Stat(idmappingFilePath); (idmappingFilePath == "") || errors.Is(err, os.ErrNotExist) {
-		fmt.Println("ID mapping file path file must be provided.")
+		fmt.Println("ID mapping file path must be provided.")
 		return
 	}
 
 	if _, err := os.Stat(idmappingSelectedFilePath); (idmappingSelectedFilePath == "") || errors.Is(err, os.ErrNotExist) {
-		fmt.Println("ID mapping selected file path file must be provided.")
+		fmt.Println("ID mapping selected file path must be provided.")
 		return
 	}
 
@@ -77,6 +77,8 @@ func main() {
 			}
 
 		}
+
+		f.Close()
 	} else {
 		accessionReader, err := os.Open(universeAccessionsFile)
 		if err != nil {
@@ -90,6 +92,7 @@ func main() {
 
 		fmt.Println(accessions_)
 		accessions = append(accessions, "")
+		accessionReader.Close()
 
 	}
 

@@ -36,7 +36,7 @@ func SliceToSet(list []string) map[string]void {
 	return set
 }
 
-func OpenFileOrGzFile(file string) (io.Reader, error) {
+func OpenFileOrGzFile(file string) (io.ReadCloser, error) {
 	f, err := os.Open(file)
 	if err != nil {
 		log.Fatal(err)
@@ -52,6 +52,7 @@ func OpenFileOrGzFile(file string) (io.Reader, error) {
 
 func GetLineCount(file string) int {
 	f, err := OpenFileOrGzFile(file)
+	defer f.Close()
 	if err != nil {
 		log.Fatal(err)
 	}

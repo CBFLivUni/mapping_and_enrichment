@@ -22,7 +22,6 @@ func readAndFilterToWriter(mappingFile string, writer *bufio.Writer, accessions 
 	}
 
 	br := bufio.NewReader(reader)
-
 	for {
 		line, err := br.ReadString('\n')
 		if err != nil {
@@ -45,6 +44,8 @@ func readAndFilterToWriter(mappingFile string, writer *bufio.Writer, accessions 
 			writer.WriteString(line + "\n")
 		}
 	}
+
+	reader.Close()
 }
 
 func WriteFilteredFile(mappingFile string, outFile string, accessions []string) {
