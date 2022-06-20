@@ -1,24 +1,6 @@
-# Function to Download a file.
-bdown=function(url, file){
-  library('RCurl')
-  f = CFILE(file, mode="wb")
-  a = curlPerform(url = url, writedata = f@ref, noprogress=FALSE)
-  close(f)
-  return(a)
-}
-
-
-# Function to download the latest mapping data files from the UniProt website.
-download_files <- function() {
-  if (!file.exists('idmapping.dat.gz')) {
-    ret = bdown('ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping.dat.gz', 'idmapping.dat.gz')
-  }
-  
-  if (!file.exists('idmapping_selected.tab.gz')) {
-    ret = bdown('https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping_selected.tab.gz', 'idmapping_selected.tab.gz')
-  }
-  
-}
+# Change the two following entries to point to paths on your system for filtered mapping files.
+idmapping_file_path = 'c:/Users/Simon Perkins/go/bin/mappings_9796_20220620185409.txt'
+idmapping_selected_file_path = 'c:/Users/Simon Perkins/go/bin/mappings_selected_9796_20220620185409.txt'
 
 # DEPRECATED: This function accepts a list of accessions and filters idmapping.data.gz (in the working directory).
 filterIdData <- function(species_all_accessions) {
@@ -39,4 +21,24 @@ filterIdData <- function(species_all_accessions) {
   
   close(incon)
   write.csv(species_data, file ='idmapping_filtered.csv')
+}
+
+map_using_uniprot_files <- function(input_id = 'UniProtKB-AC', input_values, output_id) {
+  input_values = as.character(input_values)
+  if (output_id %in% uniprot_selected_term_types) {
+    species_mapping_data = read_delim(idmapping_selected_file_path, delim = "\t", escape_double = FALSE, col_names = uniprot_selected_term_types, trim_ws = T)
+    data_terms = tibble(input_ids = input_values) %>% left_join(species_mapping_data, by = c('input_ids' = input_id)) %>% select(input_ids, output_id)
+    data_terms = data_terms %>% filter(if_all(output_id, \(x)!is.na(x)))
+    data_terms = data_terms %>% separate_rows(output_id, sep = "; ")
+  } else {
+    species_mapping_data = read_delim(idmapping_file_path, delim = "\t", escape_double = FALSE, col_names = c('accession', 'id_type', 'id'), trim_ws = T)
+    # If the input ID type is not UP accession, we need to map back to it.
+    if (input_id != 'UniProtKB-AC') {
+      input_values = species_mapping_data %>% filter(id_type == input_id) %>% filter(sapply(id, function(id_){id_ %in% input_values})) %>% select(accession) %>% pull()
+    }
+    
+    data_terms = tibble(input_ids = input_values) %>% left_join(filter(species_mapping_data, id_type == output_id), by = c('input_ids' = 'accession')) %>% select(-id_type) %>% rename_with(\(x) output_id, matches('^id$'))
+  }
+  
+  data_terms %>% filter(if_all(output_id, \(x)!is.na(x)))
 }

@@ -4,7 +4,7 @@ Mapping and enrichment of uniprot accessions for "uncommonly"" used species.
 
 ## Mapping with Files
 
-You can use uniprot ID mapping files to map between various identifiers. You may use them to map accessions to orthologous accessions (i.e. probably human). You will first need to run the Go code/executable to filter the uniprot mapping files down to just those entriesd pertaining to your species of interest. There were R and then Python versions of this code but they were too slow.
+You can use uniprot ID mapping files to map between various identifiers. You may use them to map accessions to orthologous accessions (i.e. probably human). You will first need to run the Go code/executable to filter the uniprot mapping files down to just those entries pertaining to your species of interest. There were R and then Python versions of this code but they were too slow.
 
 ### Go Console Application
 You may build the GO console application from source or you just run it. The executable (compiled for Linux) is in the 'simon/mapping_enrichment' folder of the HC storage CBF space - others will be able to direct you to this.
@@ -44,6 +44,9 @@ After running the Go application or the R/Python scripts, you can use the mappin
 
 ## Mapping with 'db_ortho'
 If you are looking to map to orthologues then as mentioned above you can try out the db_ortho web service. I have my wrapper function in 'mapping_with_db_ortho.R'. To learn the different types of input ID types and output ID types, and species for which you can map to with your IDs, check out the db_ortho website.
+
+## Mapping Examples
+Whether you are mapping with db_ortho or with uniprot files, there is R code to help you out. You can look in the examples.R file to see some examples of both.
 
 
 
