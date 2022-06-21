@@ -6,20 +6,6 @@ library(readr)
 source('uniprot_selected_term_types.R')
 source('uniprot_dat_reading.R')
 
-
-
-## Using this script.
-## 1). Download your species specific DAT file from uniprot manually and set the path below.
-## 2). Optional -Download the mapping data. This is optional as the species specific DAT file will have a lot of information, and by default
-## go data is extracted in the code but other term types can't be assumed to be extracted. You may of course alter the readDatRecord' function to extract whatever you want.
-## Keep reading 2). if you need something else. If it's GO (or a few others, see here: https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/README)
-## you need you can download the *selected.tab.gz file, else download the full idmapping.dat.gz. The download_files function downloads them both, but corrupt downloads may fool it into thinking you already have the files.
-## In that case delete them and try again. You may also download them in a web browser - that may be more reliable. This takes a long time.
-## 3). Execute the do_pipeline function with your accessions of interest and the type of terms you want to enrichment with. This function returns a tibble.
-## If the uniprot DAT file is insufficient and the larger mappings files are used, then this may take some time.
-
-
-
 enrichment_funky <- function(foreground_terms, background_terms) {
   background = table(background_terms)
   foreground = table(foreground_terms)
@@ -27,9 +13,9 @@ enrichment_funky <- function(foreground_terms, background_terms) {
   enrichment = sapply(names(background), function(term) {
     fg_counts = foreground[term]
     fg_counts = ifelse(is.na(fg_counts), 0, fg_counts)
-    fg_size = length(foreground_accessions)
+    fg_size = length(foreground_terms)
     bg_counts = background[term]
-    bg_size = length(species_universe)
+    bg_size = length(background_terms)
     
     fs_test = fisher.test(
       matrix(c(
@@ -43,6 +29,7 @@ enrichment_funky <- function(foreground_terms, background_terms) {
   })
   
   enrichment = as.data.frame(t(enrichment))
+  colnames(enrichment)[5] = 'fold_enrichment'
   enrichment$p.value.adjusted = p.adjust(enrichment$p.value, method='BH')
   enrichment
 }
