@@ -17,7 +17,7 @@ mapped_data = map_using_db_ortho(input_id = 'UniProt Accession', input_values = 
 ## For selected species, these are available here: https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/by_organism/
 ## If you want to make these files, you can make them from idmapping.dat and idmapping_selected.dat, you just need to know the NCBI taxon ID, or the whole set of accessions for that species.
 ## There is R, Python and Go code for this.
-## Here, we map our accession to GO.
+## Here, we map our accessions to GO, and KEGG.
 mapped_data = map_using_uniprot_files(input_id = 'UniProtKB-AC', input_values = from_ids, output_id = 'GO')
 mapped_data = map_using_uniprot_files(input_id = 'UniProtKB-AC', input_values = from_ids, output_id = 'KEGG')
 

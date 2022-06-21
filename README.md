@@ -49,10 +49,8 @@ If you are looking to map to orthologues then as mentioned above you can try out
 Whether you are mapping with db_ortho or with uniprot files, there is R code to help you out. You can look in the examples.R file to see some examples of both.
 
 
-
-
 ## Enrichment
-If the mappings are used to map IDs to a particular ontology, then enrichment analysis can be performed upon those ontology terms.
+If the mappings are used to map IDs to a particular ontology, then enrichment analysis can be performed upon those ontology terms. The examples.R file shows mapping to GO terms followed by enrichment analysis of GO terms.
 
 
 
